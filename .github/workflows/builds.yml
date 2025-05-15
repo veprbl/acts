@@ -417,17 +417,18 @@ jobs:
 
   eic-shell:
     runs-on: ubuntu-latest
-    container: ghcr.io/eic/eic_xl:nightly
+    #container: ghcr.io/eic/eic_xl:nightly
     steps:
       - uses: actions/checkout@v4
         with:
           submodules: true
-          lfs: true
 
       - name: Configure
-        run: >
-          ccache -z &&
-          cmake -B build -S .
+        uses: eic/run-cvmfs-osg-eic-shell@main
+        with:
+          run: >
+            ccache -z &&
+            cmake -B build -S .
 
       - name: Build
         run: cmake --build build
