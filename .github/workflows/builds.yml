@@ -429,6 +429,7 @@ jobs:
       - name: Configure
         uses: eic/run-cvmfs-osg-eic-shell@main
         with:
+          platform-release: "eic_xl:nightly"
           run: >
             ccache -z &&
             cmake -B build -S .
