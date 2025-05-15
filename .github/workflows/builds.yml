@@ -423,6 +423,9 @@ jobs:
         with:
           submodules: true
 
+      - name: Setup CMVFS
+        uses: cvmfs-contrib/github-action-cvmfs@v5
+
       - name: Configure
         uses: eic/run-cvmfs-osg-eic-shell@main
         with:
