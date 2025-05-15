@@ -426,14 +426,14 @@ jobs:
       - name: Setup CMVFS
         uses: cvmfs-contrib/github-action-cvmfs@v5
 
-      - name: Configure
+      - name: Build
         uses: eic/run-cvmfs-osg-eic-shell@main
         with:
           platform-release: "eic_xl:nightly"
-          run: >
+          run: |
             ccache -z &&
-            cmake -B build -S .
-
-      - name: Build
-        run: cmake --build build
+            cmake -B build -S . \
+              -DACTS_BUILD_EXAMPLES=ON \
+              -DACTS_BUILD_PLUGIN_DD4HEP=ON
+            cmake --build build
 
