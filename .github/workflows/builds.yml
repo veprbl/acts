@@ -449,6 +449,7 @@ jobs:
             pushd acts
             ccache -z && \
             cmake -B build -S . \
+              -GNinja \
               -DACTS_BUILD_EXAMPLES=ON \
               -DACTS_BUILD_PLUGIN_DD4HEP=ON \
               -DCMAKE_INSTALL_PREFIX=$HOME/prefix
@@ -459,7 +460,8 @@ jobs:
             pushd EICrecon
             ccache -z && \
             cmake -B build -S . \
-              Acts_ROOT=$HOME/prefix
+              -DActs_ROOT=$HOME/prefix
+            VERBOSE=1 cmake --build build
             popd
 
       - name: Save ccache
