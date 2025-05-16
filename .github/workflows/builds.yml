@@ -459,6 +459,8 @@ jobs:
             popd
 
             pushd EICrecon
+            sed -e 's#Acts::GeometryIdentifier geoId = meas2D.getSurface();#Acts::GeometryIdentifier geoId {meas2D.getSurface()};#' \
+                -i src/algorithms/tracking/CKFTracking.cc
             ccache -z && \
             env CXXFLAGS="-I$CMAKE_INSTALL_PREFIX/include" \
                 LDFLAGS="-L$CMAKE_INSTALL_PREFIX/include" \
