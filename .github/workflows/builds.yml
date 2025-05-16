@@ -460,8 +460,8 @@ jobs:
 
             pushd EICrecon
             ccache -z && \
-            env CXXFLAGS='-I$CMAKE_INSTALL_PREFIX/include' \
-                LDFLAGS='-L$CMAKE_INSTALL_PREFIX/include' \
+            env CXXFLAGS="-I$CMAKE_INSTALL_PREFIX/include" \
+                LDFLAGS="-L$CMAKE_INSTALL_PREFIX/include" \
             cmake -B build -S . \
               -DActs_ROOT=$CMAKE_INSTALL_PREFIX
             VERBOSE=1 cmake --build build
