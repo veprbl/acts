@@ -57,24 +57,34 @@ jobs:
             ccache -z && \
             export CMAKE_INSTALL_PREFIX=$HOME/prefix
             export CMAKE_CXX_COMPILER_LAUNCHER=ccache
+            echo "::group::Acts configure phase"
             cmake -B build -S . \
               -GNinja \
               -DACTS_BUILD_EXAMPLES=ON \
               -DACTS_BUILD_FATRAS=ON \
               -DACTS_BUILD_PLUGIN_DD4HEP=ON
+            echo "::endgroup::"
+            echo "::group::Acts build phase"
             cmake --build build
+            echo "::endgroup::"
+            echo "::group::Acts install phase"
             cmake --install build
+            echo "::endgroup::"
             popd
 
             pushd EICrecon
             export LD_LIBRARY_PATH="$CMAKE_INSTALL_PREFIX/lib:$LD_LIBRARY_PATH"
+            echo "::group::EICrecon configure phase"
             ccache -z && \
             env CXXFLAGS="-I$CMAKE_INSTALL_PREFIX/include" \
                 LDFLAGS="-L$CMAKE_INSTALL_PREFIX/lib" \
             cmake -B build -S . \
               -GNinja \
               -DActs_ROOT=$CMAKE_INSTALL_PREFIX
+            echo "::endgroup::"
+            echo "::group::EICrecon build phase"
             cmake --build build
+            echo "::endgroup::"
             popd
 
             ccache -s
