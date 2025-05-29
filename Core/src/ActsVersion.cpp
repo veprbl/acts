@@ -10,7 +10,7 @@
 
 #include <ostream>
 #include <string_view>
-
+#error "error"
 namespace Acts {
 
 VersionInfo::VersionInfo(unsigned int majorIn, unsigned int minorIn,
