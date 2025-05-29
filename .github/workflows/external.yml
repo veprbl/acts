@@ -54,7 +54,6 @@ jobs:
           platform-release: "eic_xl:nightly"
           run: |
             pushd acts
-            echo 99.9.9 > version_number
             ccache -z && \
             export CMAKE_INSTALL_PREFIX=$HOME/prefix
             export CMAKE_CXX_COMPILER_LAUNCHER=ccache
