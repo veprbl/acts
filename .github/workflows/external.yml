@@ -54,52 +54,57 @@ jobs:
           platform-release: "eic_xl:nightly"
           run: |
             pushd acts
-            echo 99.9.9 > version_number
             ccache -z && \
             export CMAKE_INSTALL_PREFIX=$HOME/prefix
             export CMAKE_CXX_COMPILER_LAUNCHER=ccache
+            echo "::group::Acts configure phase"
             cmake -B build -S . \
               -GNinja \
               -DACTS_BUILD_EXAMPLES=ON \
               -DACTS_BUILD_FATRAS=ON \
               -DACTS_BUILD_PLUGIN_DD4HEP=ON
+            echo "::endgroup::"
+            echo "::group::Acts build phase"
             cmake --build build
+            echo "::endgroup::"
+            echo "::group::Acts install phase"
             cmake --install build
+            echo "::endgroup::"
             popd
 
             pushd EICrecon
             export LD_LIBRARY_PATH="$CMAKE_INSTALL_PREFIX/lib:$LD_LIBRARY_PATH"
+            echo "::group::EICrecon configure phase"
             ccache -z && \
             env CXXFLAGS="-I$CMAKE_INSTALL_PREFIX/include" \
                 LDFLAGS="-L$CMAKE_INSTALL_PREFIX/lib" \
             cmake -B build -S . \
               -GNinja \
               -DActs_ROOT=$CMAKE_INSTALL_PREFIX
+            echo "::endgroup::"
+            echo "::group::EICrecon build phase"
             cmake --build build
+            echo "::endgroup::"
             popd
 
             ccache -s
 
-      - name: Find Comment
+      - name: Create comment body
         if: ${{ steps.build.outcome == 'failure' && github.event_name == 'pull_request' }}
-        uses: peter-evans/find-comment@v3
-        id: fc
-        with:
-          issue-number: ${{ github.event.pull_request.number }}
-          comment-author: 'github-actions[bot]'
-          body-includes: Downstream build failure
+        run: |
+          cat >comment-50-external-failure.md <<EOF
+          Downstream build failure
 
-      - name: Create or update comment
+           - eic-shell (cc @eic/epic-acts-devs)
+          EOF
+
+      - name: Upload Artifact
         if: ${{ steps.build.outcome == 'failure' && github.event_name == 'pull_request' }}
-        uses: peter-evans/create-or-update-comment@v4
+        uses: actions/upload-artifact@v4
         with:
-          comment-id: ${{ steps.fc.outputs.comment-id }}
-          issue-number: ${{ github.event.pull_request.number }}
-          body: |
-            Downstream build failure
-
-             - eic-shell (cc @eic/epic-acts-devs)
-          edit-mode: replace
+          name: comment-50-external-failure.md
+          path: comment-50-external-failure.md
+          retention-days: 5
 
       - name: Save ccache
         uses: actions/cache/save@v4
