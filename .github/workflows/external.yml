@@ -89,26 +89,22 @@ jobs:
 
             ccache -s
 
-      - name: Find Comment
+      - name: Create comment body
         if: ${{ steps.build.outcome == 'failure' && github.event_name == 'pull_request' }}
-        uses: peter-evans/find-comment@v3
-        id: fc
-        with:
-          issue-number: ${{ github.event.pull_request.number }}
-          comment-author: 'github-actions[bot]'
-          body-includes: Downstream build failure
+        run: |
+          cat >comment-50-external-failure.md <<EOF
+          Downstream build failure
 
-      - name: Create or update comment
+           - eic-shell (cc @eic/epic-acts-devs)
+          EOF
+
+      - name: Upload Artifact
         if: ${{ steps.build.outcome == 'failure' && github.event_name == 'pull_request' }}
-        uses: peter-evans/create-or-update-comment@v4
+        uses: actions/upload-artifact@v4
         with:
-          comment-id: ${{ steps.fc.outputs.comment-id }}
-          issue-number: ${{ github.event.pull_request.number }}
-          body: |
-            Downstream build failure
-
-             - eic-shell (cc @eic/epic-acts-devs)
-          edit-mode: replace
+          name: comment-50-external-failure.md
+          path: comment-50-external-failure.md
+          retention-days: 5
 
       - name: Save ccache
         uses: actions/cache/save@v4
