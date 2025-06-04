@@ -88,6 +88,11 @@ jobs:
         with:
           python-version: '3.12'
 
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: comment-*.md
+          run-id: ${context.payload.workflow_run.id}
+
       - name: Render comment
         if: steps.get-pr-number.outputs.result != 'false'
         run: |
@@ -99,6 +104,7 @@ jobs:
           else
             echo "🟥 summary not found!" >> comment.md
           fi
+          cat comment-*.md >> comment.md
           cat comment.md
 
       - name: Find Comment
