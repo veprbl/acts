@@ -51,32 +51,23 @@ jobs:
 
 
       - name: 'Determine PR number'
-        uses: actions/github-script@v7
         id: get-pr-number
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            if(!${{ steps.dl-af.outputs.result }}) {
-              console.log("No artifact => no PR number");
-              return false;
-            }
-            let fs = require('fs');
-            let file = 'physmon/pr_number';
-            if(!fs.existsSync(file)) {
-              console.log('No file at ' + file);
-              return false;
-            }
-
-
-            let number = Number(fs.readFileSync(file, {encoding: 'utf8'}).trim());
-            console.log('PR number is '+number);
-            core.exportVariable('PR_NUMBER', number)
-
-            let sha = fs.readFileSync('physmon/sha', {encoding: 'utf8'}).trim();
-            console.log('SHA is '+sha);
-            core.exportVariable('PR_SHA', sha)
-
-            return number;
+        if: steps.dl-af.outputs.result != 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_TARGET_REPO: ${{ github.repository }}
+          PR_BRANCH: |-
+            ${{
+              (github.event.workflow_run.head_repository.owner.login != github.event.workflow_run.repository.owner.login)
+                && format('{0}:{1}', github.event.workflow_run.head_repository.owner.login, github.event.workflow_run.head_branch)
+                || github.event.workflow_run.head_branch
+            }}
+        run: |
+          gh pr view --repo "${PR_TARGET_REPO}" "${PR_BRANCH}" \
+            --json 'number,headRefOid' \
+            --jq '"PR_NUMBER=\(.number)\nPR_SHA=\(.headRefOid)"' \
+            >> $GITHUB_OUTPUT
+          cat $GITHUB_OUTPUT
 
 
       # ping the url, triggers caching of the artifact
