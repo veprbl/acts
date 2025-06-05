@@ -36,6 +36,7 @@ struct VersionInfo {
 
   VersionInfo() = delete;
 
+
   static VersionInfo fromHeader() {
     return VersionInfo(VersionMajor, VersionMinor, VersionPatch, CommitHash);
   }
