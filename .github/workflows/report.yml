@@ -17,10 +17,10 @@ jobs:
         id: dl-af
         with:
           script: |
-            console.log(`Getting artifacts for workflow run id: ${context.payload.workflow_run.id}`);
+            console.log(context.payload.repository);
             let allArtifacts = await github.rest.actions.listWorkflowRunArtifacts({
-               owner: context.repo.owner,
-               repo: context.repo.repo,
+               owner: context.payload.repository.owner,
+               repo: context.payload.repository.repo,
                run_id: context.payload.workflow_run.id,
             });
             let matchArtifacts = allArtifacts.data.artifacts.filter((artifact) => {
