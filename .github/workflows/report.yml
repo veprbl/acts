@@ -67,6 +67,7 @@ jobs:
             --json 'number,headRefOid' \
             --jq '"PR_NUMBER=\(.number)\nPR_SHA=\(.headRefOid)"' \
             >> $GITHUB_OUTPUT
+          cat $GITHUB_OUTPUT
 
 
       # ping the url, triggers caching of the artifact
