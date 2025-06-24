@@ -15,6 +15,7 @@
 
 #include <iosfwd>
 
+
 namespace Acts {
 
 // clang-format does not like the CMake @...@ replacement variables
