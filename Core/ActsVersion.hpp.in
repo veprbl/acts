@@ -5,9 +5,8 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
-
 #pragma once
-
+//2
 //  Caution: this is the only Acts header that is guaranteed
 //  to change with every Acts release. Including this header
 //  will cause a recompile every time a new Acts version is
