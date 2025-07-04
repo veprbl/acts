@@ -447,6 +447,7 @@ jobs:
         with:
           platform-release: "eic_xl:nightly"
           run: |
+            exit 1
             pushd acts
             ccache -z && \
             export CMAKE_INSTALL_PREFIX=$HOME/prefix
