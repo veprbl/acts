@@ -463,6 +463,7 @@ jobs:
             echo "::endgroup::"
             popd
 
+            unset CMAKE_CXX_COMPILER_LAUNCHER
             pushd EICrecon
             export LD_LIBRARY_PATH="$CMAKE_INSTALL_PREFIX/lib:$LD_LIBRARY_PATH"
             echo "::group::EICrecon configure phase"
