@@ -19,7 +19,7 @@ env:
   HOMEBREW_NO_INSTALL_CLEANUP: 1
   CCACHE_DIR: ${{ github.workspace }}/ccache
   CCACHE_MAXSIZE: 500M
-  CCACHE_KEY_SUFFIX: r2
+  CCACHE_KEY_SUFFIX: r3
   DEPENDENCY_TAG: v11.1.0
 
 jobs:
@@ -463,6 +463,7 @@ jobs:
             echo "::endgroup::"
             popd
 
+            unset CMAKE_CXX_COMPILER_LAUNCHER
             pushd EICrecon
             export LD_LIBRARY_PATH="$CMAKE_INSTALL_PREFIX/lib:$LD_LIBRARY_PATH"
             echo "::group::EICrecon configure phase"
