@@ -409,21 +409,12 @@ jobs:
 
       - name: Build
         id: build
-        uses: addnab/docker-run-action@v3
+        uses: eic/run-cvmfs-osg-eic-shell@main
         continue-on-error: true
         with:
-          image: "ghcr.io/eic/eic_ci_without_acts:nightly"
-          options: -v ${{ github.workspace }}:/work -v ${{ env.CCACHE_DIR }}:/root/.cache/ccache
-          shell: bash
+          orgainization: eicweb
+          platform-release: eic_ci_without_acts:nightly
           run: |
-            for script in /.singularity.d/env/*.sh; do
-              if [ -f "$script" ]; then
-                . "$script"
-              fi
-            done
-            cd /work
-            set -ue
-
             pushd acts
             ccache -p | grep cache_dir
             ccache -z && \
